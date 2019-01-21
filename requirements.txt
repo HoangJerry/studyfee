@@ -1,0 +1,6 @@
+django==2.1.5
+Pillow
+djangorestframework
+djongo
+django-cors-headers
+
