@@ -1,17 +1,17 @@
 <div class="row border-bottom">
     <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
          <div class="navbar-header " >
-         <img class ="d-inline-block" src="./assets/img/logo_header.png" alt="logo" width="100">
+         <img class ="d-inline-block" src="/static/assets/img/logo_header.jpeg" alt="logo" width="370">
 
             <a class="minimalize-styl-2 btn btn-primary " (click)="toggleNavigation()"><i class="fa fa-bars"></i> </a>
         </div>
         <ul class="nav navbar-top-links navbar-right">
             <li>
                 <span>
-                    <img alt="image" class="img-circle" width="30"
-                             src="./assets/img/avatar/{{loginInfo.avatar}}" />
+                    <img alt="image" class="img-circle" width="80"
+                             src="{{loginInfo.avatar}}" />
                     </span>
-                          <strong class="font-bold">{{loginInfo.first_name}} {{loginInfo.last_name}}</strong>
+                          <strong class="font-bold">{{loginInfo.full_name}}</strong>
             </li>
             <li>
                 <a (click)="logout()">

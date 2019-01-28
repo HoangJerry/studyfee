@@ -1,13 +1,17 @@
 import { Component, Input } from '@angular/core';
 import {smoothlyMenu} from "../../app.helpers";
 import {Login} from "../../models/login";
+import { Router }                   from '@angular/router'
 
 @Component({
     selector: 'topnavbar',
     templateUrl: 'topnavbar.component.html'
 })
 export class Topnavbar {
-    @Input() loginInfo:Login;
+    loginInfo :any;
+    constructor(private router: Router) {
+        this.loginInfo = JSON.parse(localStorage.getItem('user'));
+    }
     ngOnInit() {
 
     }
@@ -17,6 +21,6 @@ export class Topnavbar {
     }
     logout() {
         localStorage.clear();
-        // location.href='http://to_login_page';
+        this.router.navigate(['/login']);
     }
 }

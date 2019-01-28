@@ -1,0 +1,19 @@
+.addModal label{
+	width: 150px;
+	display: inline-block;
+	font-weight: 800;
+
+	.text-black{
+		color: black;
+	}
+}
+
+.addModal input, select, select:focus {
+	width: 300px;
+	border-radius: 2px;
+	border: 1px solid;
+	padding: 8px;
+	display: inline-block;
+    outline: none ;
+    margin-right: 30px;
+}

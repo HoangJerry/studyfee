@@ -34,13 +34,20 @@ class UserProfile(generics.GenericAPIView):
 
 class MultiDelete():
     def delete(self, request):
-    	list_delete = request.data.get('list_delete')
-    	self.queryset.filter(id__in=list_delete)
-    	return Response(status=status.HTTP_200_OK)
+        list_delete = request.data.get('list_delete')
+        self.queryset.filter(id__in=list_delete).delete()
+        return Response(status=status.HTTP_200_OK,data={'detail':'delete success'})
 
 class StudentList(generics.ListCreateAPIView, MultiDelete):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, format=None):
+        if request.data.get('list_delete'):
+            return self.delete(request)
+        else:
+            return super(StudentList,self).post(request,format=None)
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()

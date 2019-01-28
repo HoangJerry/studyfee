@@ -1,5 +1,5 @@
-<div id="wrapper" *ngIf="loginInfo">
-  <topnavbar [loginInfo]="loginInfo"></topnavbar>
+<div id="wrapper" *ngIf="currentUrl!='/login'">
+  <topnavbar></topnavbar>
   <navigation></navigation>
   <div id="page-wrapper" class="gray-bg">
 
@@ -13,3 +13,5 @@
     </div>
   </div>
 </div>
+<router-outlet *ngIf="currentUrl=='/login'"></router-outlet>
+<ng2-toasty></ng2-toasty>

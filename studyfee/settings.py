@@ -66,7 +66,7 @@ CORS_ORIGIN_ALLOW_ALL = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'studyfee/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

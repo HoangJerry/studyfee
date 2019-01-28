@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import {Login} from "./models/login";
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +14,15 @@ export class AppComponent {
       avatar:'ay.jpeg',
       title:'Senior Developer'
   };
+
+  currentUrl: string='';
+
+  constructor(private router: Router) {
+  	this.router.events.subscribe((e) => {
+	  if (e instanceof NavigationEnd) {
+	    this.currentUrl = e.url;
+	  }
+	});
+  }
+  
 }
