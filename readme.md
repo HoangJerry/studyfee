@@ -64,3 +64,25 @@ python manage.py runserver
 
 # go to localhost:8000/admin to login
 ```
+
+## Build angular to js files
+```
+cd ng-bootstrap
+```
+
+```
+ng build
+
+or
+
+ng build --env=prod --output-hashing
+
+```
+Tại django server
+```
+(env) python manage.py collectstatic
+yes
+(env) python manage.py runserver
+```
+#go to localhost:8000
+
