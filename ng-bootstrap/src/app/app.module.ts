@@ -16,6 +16,8 @@ import { StudentsComponent } from './pages/students/students.component';
 import { HttpService, AuthService, AuthGuard } from './http.service';
 import { ToastyModule } from 'ng2-toasty';
 import { ModalModule } from "ngx-modal";
+import { BaseLayoutComponent } from './base-layout/base-layout.component';
+import { SiteLayoutComponent } from './site-layout/site-layout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -24,6 +26,8 @@ import { ModalModule } from "ngx-modal";
     HomeComponent,
     LoginComponent,
     StudentsComponent,
+    BaseLayoutComponent,
+    SiteLayoutComponent,
   ],
   imports: [
     BrowserModule,

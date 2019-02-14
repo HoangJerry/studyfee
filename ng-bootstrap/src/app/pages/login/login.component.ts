@@ -23,11 +23,12 @@ export class LoginComponent implements OnInit {
     this.auth.hasToken().subscribe((result)=>{
       // console.log(result);
       if (result){
-        // this.router.navigate(['/home']);
-        window.location.href='/home';
+        this.router.navigate(['/home']);
       }
     })
-        // this.router.navigate(['/home']);
+    // if (this.auth.isLoggedIn()){
+    //     this.router.navigate(['/home']);
+    // }
         // console.log("ch")
         // window.location.href='/home';
      
@@ -39,8 +40,8 @@ export class LoginComponent implements OnInit {
         localStorage.setItem('user',JSON.stringify(data));
         this.auth.login(data.auth_token)
         this.toastyService.success("Login success!");
-        // this.router.navigate(['/home']);
-        window.location.href='/home';
+        this.router.navigate(['/home']);
+        // window.location.href='/home';
       },
       (error)=>{
         this.toastyService.error(error.error.detail);

@@ -19,10 +19,12 @@ from django.conf import settings
 from django.conf.urls.static import static
 from manager import urls as api_urls
 from django.views.generic import TemplateView
+from rest_framework.documentation import include_docs_urls
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(api_urls)),
+    url(r'^docs/', include_docs_urls(title='Study fee API documentation')),
 ]
 
 if settings.DEBUG:

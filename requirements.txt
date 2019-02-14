@@ -3,4 +3,5 @@ Pillow
 djangorestframework
 djongo
 django-cors-headers
+coreapi
 

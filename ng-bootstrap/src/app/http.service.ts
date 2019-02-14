@@ -130,3 +130,40 @@ export class AuthGuard implements CanActivate {
         
     }
 }
+
+// @Injectable()
+// export class AuthService {
+//     constructor(private http: HttpService, private toastyService: ToastyService,
+//         private toastyConfig: ToastyConfig, private router: Router) {
+//         this.toastyConfig.theme = 'material';
+//     }
+
+//     isLoginSubject: boolean = false;
+//     isLoggedIn() {
+//         console.log(localStorage.getItem('token'));
+//         if (localStorage.getItem('token')!=null){ return true};
+//         return false;
+//     }
+
+//     login(token): void {
+//         localStorage.setItem('token', token);
+//         this.isLoginSubject = true;
+//     }
+
+//     logout = () => {
+//         localStorage.removeItem('token');
+//         this.isLoginSubject = false;
+//         localStorage.removeItem('body');
+//     }
+// }
+// @Injectable()
+// export class AuthGuard implements CanActivate {
+//     constructor(private router: Router, private _auth:AuthService) { }
+
+//     canActivate(next:ActivatedRouteSnapshot, state:RouterStateSnapshot): boolean {
+//         // not logged in so redirect to login page with the return url
+//         if (this._auth.isLoggedIn()) return true;   
+//         this.router.navigate(['/login']);
+//         return false;       
+//     }
+// }

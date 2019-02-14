@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import {smoothlyMenu} from "../../app.helpers";
 import {Login} from "../../models/login";
 import { Router }                   from '@angular/router'
+import { AuthService } from '../../http.service';
 
 @Component({
     selector: 'topnavbar',
@@ -9,7 +10,7 @@ import { Router }                   from '@angular/router'
 })
 export class Topnavbar {
     loginInfo :any;
-    constructor(private router: Router) {
+    constructor(private router: Router, private auth:AuthService) {
         this.loginInfo = JSON.parse(localStorage.getItem('user'));
     }
     ngOnInit() {
@@ -20,7 +21,7 @@ export class Topnavbar {
         smoothlyMenu();
     }
     logout() {
-        localStorage.clear();
+        this.auth.logout();
         this.router.navigate(['/login']);
     }
 }

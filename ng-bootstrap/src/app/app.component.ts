@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import {Login} from "./models/login";
 import { Router, NavigationEnd } from '@angular/router';
+import { AuthService } from './http.service';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
   selector: 'app-root',
@@ -8,21 +10,9 @@ import { Router, NavigationEnd } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  loginInfo:Login = {
-      first_name:'Andrew',
-      last_name:'Yang',
-      avatar:'ay.jpeg',
-      title:'Senior Developer'
-  };
-
-  currentUrl: string='';
-
-  constructor(private router: Router) {
-  	this.router.events.subscribe((e) => {
-	  if (e instanceof NavigationEnd) {
-	    this.currentUrl = e.url;
-	  }
-	});
+  constructor(private router: Router,
+              private auth:AuthService) {
   }
-  
+  ngOnInit() {
+  }
 }
