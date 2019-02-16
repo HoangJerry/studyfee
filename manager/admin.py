@@ -26,6 +26,23 @@ class StudentAdmin(admin.ModelAdmin):
     list_display = ('student_id','first_name','last_name','date_of_bidth',
                     'study_at_class','type_of_class','parent_first_name',
                     'parent_last_name','parent_phone','parent_email')
+
+    filter_horizontal = ('parent',)
+
     
 admin.site.register(UserBase, UserBaseAdmin)
 admin.site.register(Student, StudentAdmin)
+
+@admin.register(Parent)
+class ParentAdmin(admin.ModelAdmin):
+    list_display = ('id','first_name','last_name','date_of_bidth','phone','email','address')
+
+@admin.register(School)
+class SchoolAdmin(admin.ModelAdmin):
+    list_display = [field.name for field in School._meta.get_fields()]
+
+@admin.register(ClassGroup)
+@admin.register(Class)
+@admin.register(Teacher)
+class TeacherAdmin(admin.ModelAdmin):
+    pass

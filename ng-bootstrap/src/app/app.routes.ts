@@ -12,6 +12,11 @@ import { SiteLayoutComponent } from './site-layout/site-layout.component';
 
 const routes=[
     {
+        path: '',
+        redirectTo:'/students',
+        pathMatch: 'full',
+    },
+    {
         path:'',
         component: BaseLayoutComponent,
         children: [
@@ -44,7 +49,7 @@ const routes=[
     {
         path: '**',
         redirectTo:'/students',
-    }
+    },
 ];
 
 
