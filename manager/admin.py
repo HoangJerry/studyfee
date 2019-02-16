@@ -24,7 +24,7 @@ class UserBaseAdmin(UserAdmin):
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ('student_id','first_name','last_name','date_of_bidth',
-                    'study_at_class','type_of_class','parent_first_name',
+                    'parent_first_name',
                     'parent_last_name','parent_phone','parent_email')
 
     filter_horizontal = ('parent',)

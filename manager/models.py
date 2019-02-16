@@ -27,8 +27,7 @@ class Student(models.Model):
     first_name = models.CharField(_('first name'),max_length=200, null=True, blank=True)
     last_name = models.CharField(_('last name'),max_length=200, null=True, blank=True)
     date_of_bidth = models.DateField(_('date of bidth'))
-    study_at_class = models.PositiveSmallIntegerField(_('study at class'))
-    type_of_class = models.PositiveSmallIntegerField(_('type of class'))
+    study_at_class = models.ForeignKey("Class", on_delete=models.CASCADE, null=True, blank=True)
     parent_first_name = models.CharField(_('parent first name'),max_length=200, null=True, blank=True)
     parent_last_name = models.CharField(_('parent last name'),max_length=200, null=True, blank=True)
     parent_phone = models.CharField(_('parent phone'),max_length=200, null=True, blank=True)
@@ -81,7 +80,7 @@ class Class(models.Model):
 
     def __str__(self):
         return self.class_id
-    
+
 
 class Teacher(models.Model):
     teacher_id = models.CharField(_('teacher id'),max_length=200, null=True, blank=True)
