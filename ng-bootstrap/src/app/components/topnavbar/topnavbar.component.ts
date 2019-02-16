@@ -6,7 +6,9 @@ import { AuthService } from '../../http.service';
 
 @Component({
     selector: 'topnavbar',
-    templateUrl: 'topnavbar.component.html'
+    templateUrl: 'topnavbar.component.html',
+    styleUrls: ['./topnavbar.component.css']
+
 })
 export class Topnavbar {
     loginInfo :any;

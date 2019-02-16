@@ -9,11 +9,66 @@
 }
 
 .addModal input, select, select:focus {
-	width: 300px;
+	width: 250px;
 	border-radius: 2px;
 	border: 1px solid;
 	padding: 8px;
 	display: inline-block;
     outline: none ;
     margin-right: 30px;
+}
+
+@media (max-width: 991px) {
+	.addModal label{
+		width: 80px;
+		display: inline-block;
+		font-weight: 800;
+
+		.text-black{
+			color: black;
+		}
+	}
+
+	.addModal input, select, select:focus {
+		width: 150px;
+		border-radius: 2px;
+		border: 1px solid;
+		padding: 8px;
+		display: inline-block;
+	    outline: none ;
+	    margin-right: 30px;
+	}
+}
+@media (max-width: 521px) {
+	.addModal label{
+		width: 80px;
+		display: inline-block;
+		font-weight: 800;
+
+		.text-black{
+			color: black;
+		}
+	}
+
+	.addModal input, select, select:focus {
+		width: 120px;
+		border-radius: 2px;
+		border: 1px solid;
+		padding: 8px;
+		display: inline-block;
+	    outline: none ;
+	    margin-right: 30px;
+	}
+}
+
+.btnNav{
+	margin: 0 5px;
+	margin-bottom: 15px;
+}
+.controllerRight{
+	float: right;
+	margin: 15px 0;
+}
+.titleLeft{
+	display: inline-block;
 }

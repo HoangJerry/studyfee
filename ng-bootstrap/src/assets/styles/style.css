@@ -8403,8 +8403,11 @@ body.md-skin {
     text-align: right;
     display: block;
   }
-  .navbar-static-side {
+  .mini-navbar .navbar-static-side {
     display: none;
+  }
+  body.mini-navbar #page-wrapper{
+    margin: 0px;
   }
   body:not(.mini-navbar) {
     -webkit-transition: background-color 500ms linear;
