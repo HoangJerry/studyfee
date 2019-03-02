@@ -47,8 +47,31 @@ class StudentList(generics.ListCreateAPIView, MultiDelete):
         if request.data.get('list_delete'):
             return self.delete(request)
         else:
-            return super(StudentList,self).post(request,format=None)
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            student = serializer.create(serializer.validated_data)
+
+            parent, created = Parent.objects.get_or_create(first_name=request.data['parent_first_name'],
+                                                            last_name=request.data['parent_last_name'],
+                                                            phone=request.data['parent_phone'],
+                                                            email=request.data['parent_email'])
+            student.parent.add(parent)
+            
+            return Response(StudentSerializer(student).data,status=status.HTTP_200_OK) 
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+
+class ClassList(generics.ListAPIView):
+    queryset = Class.objects.all()
+    serializer_class = ClassSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    paginator = None
+
+class SchoolList(generics.ListAPIView):
+    queryset = School.objects.all()
+    serializer_class = SchoolSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    paginator = None

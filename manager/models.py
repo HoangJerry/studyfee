@@ -24,14 +24,15 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 
 class Student(models.Model):
     student_id = models.CharField(_('student id'), unique=True, max_length=200)
-    first_name = models.CharField(_('first name'),max_length=200, null=True, blank=True)
-    last_name = models.CharField(_('last name'),max_length=200, null=True, blank=True)
-    date_of_bidth = models.DateField(_('date of bidth'))
-    study_at_class = models.ForeignKey("Class", on_delete=models.CASCADE, null=True, blank=True)
+    first_name = models.CharField(_('first name'),max_length=25)
+    last_name = models.CharField(_('last name'),max_length=10)
+    date_of_bidth = models.DateField(_('date of bidth'), null=True, blank=True)
+    study_at_class = models.ForeignKey("Class", on_delete=models.CASCADE)
+    school = models.ForeignKey("School", on_delete=models.CASCADE)
     parent_first_name = models.CharField(_('parent first name'),max_length=200, null=True, blank=True)
     parent_last_name = models.CharField(_('parent last name'),max_length=200, null=True, blank=True)
     parent_phone = models.CharField(_('parent phone'),max_length=200, null=True, blank=True)
-    parent_email = models.EmailField(_('parent email'))
+    parent_email = models.EmailField(_('parent email'), null=True, blank=True)
     parent = models.ManyToManyField("Parent")
 
     def __str__(self):
@@ -42,8 +43,8 @@ class Student(models.Model):
         return u'{} {}'.format(self.first_name, self.last_name)
 
 class Parent(models.Model):
-    first_name = models.CharField(_('first name'),max_length=200, null=True, blank=True)
-    last_name = models.CharField(_('last name'),max_length=200, null=True, blank=True)
+    first_name = models.CharField(_('first name'),max_length=25, null=True, blank=True)
+    last_name = models.CharField(_('last name'),max_length=10, null=True, blank=True)
     date_of_bidth = models.DateField(_('date of bidth'))
     phone = models.CharField(_('parent phone'),max_length=200, null=True, blank=True)
     email = models.EmailField(_('parent email'))
@@ -71,9 +72,9 @@ class Class(models.Model):
     name = models.CharField(_('name'),max_length=200, null=True, blank=True)
     estimate_start_date = models.DateField(_('estimate start date'))
     estimate_end_date = models.DateField(_('estimate end date'))
-    start_date = models.CharField(_('start date'),max_length=200, null=True, blank=True)
-    end_date = models.CharField(_('end date'),max_length=200, null=True, blank=True)
-    place = models.CharField(_('note'),max_length=200, null=True, blank=True)
+    start_date = models.DateField(_('start date'), null=True, blank=True)
+    end_date = models.DateField(_('end date'), null=True, blank=True)
+    place = models.CharField(_('place'),max_length=200, null=True, blank=True)
     teacher_1 = models.ForeignKey("Teacher", related_name='teacher_1', on_delete=models.CASCADE)
     teacher_2 = models.ForeignKey("Teacher", related_name='teacher_2', on_delete=models.CASCADE)
     note = models.CharField(_('note'),max_length=200, null=True, blank=True)
@@ -84,8 +85,8 @@ class Class(models.Model):
 
 class Teacher(models.Model):
     teacher_id = models.CharField(_('teacher id'),max_length=200, null=True, blank=True)
-    first_name = models.CharField(_('first name'),max_length=200, null=True, blank=True)
-    last_name = models.CharField(_('last name'),max_length=200, null=True, blank=True)
+    first_name = models.CharField(_('first name'),max_length=25, null=True, blank=True)
+    last_name = models.CharField(_('last name'),max_length=10, null=True, blank=True)
     phone = models.CharField(_('phone'),max_length=200, null=True, blank=True)
     email = models.EmailField(_('email'))
     address = models.CharField(_('address'),max_length=200, null=True, blank=True)
@@ -100,6 +101,7 @@ class Teacher(models.Model):
         return u'{} {}'.format(self.first_name, self.last_name)
 
 class School(models.Model):
+    school_id = models.CharField(_('school id'), unique=True, max_length=200)
     name = models.CharField(_('name'),max_length=200, null=True, blank=True)
     president = models.CharField(_('president'),max_length=200, null=True, blank=True)
     date_of_bidth = models.DateField(_('date of bidth'))
@@ -107,3 +109,6 @@ class School(models.Model):
     email = models.EmailField(_('email'))
     address = models.CharField(_('address'),max_length=200, null=True, blank=True)
     note = models.CharField(_('note'),max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.name

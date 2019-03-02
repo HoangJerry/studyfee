@@ -35,6 +35,16 @@ export class HttpService {
     headers = headers.set('Authorization','Token '+localStorage.getItem('token'))
     return this.http.get(this.APIURL+'student/?offset='+page,{headers:headers})
   }
+  ClassList = () => {
+    let headers = this.headers
+    headers = headers.set('Authorization','Token '+localStorage.getItem('token'))
+    return this.http.get(this.APIURL+'class/',{headers:headers})
+  }
+  SchoolList = () => {
+    let headers = this.headers
+    headers = headers.set('Authorization','Token '+localStorage.getItem('token'))
+    return this.http.get(this.APIURL+'school/',{headers:headers})
+  }
 
   StudentCreate = (data) => {
     let headers = this.headers

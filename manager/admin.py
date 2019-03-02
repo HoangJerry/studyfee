@@ -39,7 +39,7 @@ class ParentAdmin(admin.ModelAdmin):
 
 @admin.register(School)
 class SchoolAdmin(admin.ModelAdmin):
-    list_display = [field.name for field in School._meta.get_fields()]
+    list_display = ('name','president','date_of_bidth','phone','email','address','note')
 
 @admin.register(ClassGroup)
 @admin.register(Class)

@@ -22,14 +22,18 @@ export class StudentsComponent implements OnInit {
   new_student:Stutdent = new Stutdent;
   multiSelect:any = false;
   multiSelectedList = [];
-  selectClass = [{"class_id":1,"class_cd":"TCV_DH1"},
-                {"class_id":2,"class_cd":"TCV_DH2"}]
-  selectClassGroup = [{"class_group_id":1,"class_group_cd":"Dài hạn tại trường"},
-                {"class_group_id":2,"class_group_cd":"Dài hạn tại trung tâm"}]
+  selectClass:any;
+  selectSchool:any;
 
   constructor(private http:HttpService,
             private toastyService:ToastyService) {
   	this.getStudents((this.currentPage-1)*this.numberPerPage);
+    this.http.ClassList().subscribe((data)=>{
+      this.selectClass=data;
+    })
+    this.http.SchoolList().subscribe((data)=>{
+      this.selectSchool=data;
+    })
   }
 
   ngOnInit() {
