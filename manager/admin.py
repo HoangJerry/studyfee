@@ -23,19 +23,11 @@ class UserBaseAdmin(UserAdmin):
     list_filter = ('is_staff', 'is_superuser')
 
 class StudentAdmin(admin.ModelAdmin):
-    list_display = ('student_id','first_name','last_name','date_of_bidth',
-                    'parent_first_name',
-                    'parent_last_name','parent_phone','parent_email')
-
-    filter_horizontal = ('parent',)
+    list_display = ('student_cd','first_name','last_name','date_of_bidth')
 
     
 admin.site.register(UserBase, UserBaseAdmin)
 admin.site.register(Student, StudentAdmin)
-
-@admin.register(Parent)
-class ParentAdmin(admin.ModelAdmin):
-    list_display = ('id','first_name','last_name','date_of_bidth','phone','email','address')
 
 @admin.register(School)
 class SchoolAdmin(admin.ModelAdmin):

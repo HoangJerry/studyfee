@@ -7,6 +7,16 @@
 		color: black;
 	}
 }
+.addModal .sub label{
+	margin-left: 50px;
+	width: 100px;
+	display: inline-block;
+	font-weight: 800;
+
+	.text-black{
+		color: black;
+	}
+}
 
 .addModal input, select, select:focus {
 	width: 250px;
@@ -28,6 +38,18 @@
 			color: black;
 		}
 	}
+
+	.addModal .sub label{
+		margin-left: 30px;
+		width: 50px;
+		display: inline-block;
+		font-weight: 800;
+
+		.text-black{
+			color: black;
+		}
+	}
+
 
 	.addModal input, select, select:focus {
 		width: 150px;

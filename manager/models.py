@@ -23,33 +23,58 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
         Token.objects.create(user=instance)
 
 class Student(models.Model):
-    student_id = models.CharField(_('student id'), unique=True, max_length=200)
+    CONST_GENDER_MALE = 0
+    CONST_GENDER_FEMALE = 10
+    CONST_GENDER_OTHER = 20
+
+    CONST_GENDER = (
+        (CONST_GENDER_MALE, _('Male')),
+        (CONST_GENDER_FEMALE, _('Female')),
+        (CONST_GENDER_OTHER, _('Other')),
+    )
+
+    student_cd = models.CharField(_('student id'), max_length=200,null=True, blank=True)
     first_name = models.CharField(_('first name'),max_length=25)
     last_name = models.CharField(_('last name'),max_length=10)
+    gender = models.PositiveSmallIntegerField(_('gender'), choices=CONST_GENDER,
+                                        default=CONST_GENDER_OTHER)
     date_of_bidth = models.DateField(_('date of bidth'), null=True, blank=True)
+    current_class = models.CharField(_('current class'),max_length=10, null=True, blank=True)
+    current_school = models.CharField(_('current school'),max_length=10, null=True, blank=True)
+    eng_listening = models.FloatField(_('english listening'), null=True, blank=True)
+    eng_reading = models.FloatField(_('english reading'), null=True, blank=True)
+    eng_speaking = models.FloatField(_('english speaking'), null=True, blank=True)
+    eng_writing = models.FloatField(_('english writing'), null=True, blank=True)
+
+    gifted_skills = models.CharField(_('gifted skill'),max_length=200, null=True, blank=True)
+    robotics_skills = models.CharField(_('robotics skills'),max_length=200, null=True, blank=True)
+    robotics_month = models.CharField(_('robotics month'),max_length=200, null=True, blank=True)
+    student_phone = models.CharField(_('student phone'),max_length=10, null=True, blank=True)
+    student_email = models.EmailField(_('student email'),null=True, blank=True)
+
     study_at_class = models.ForeignKey("Class", on_delete=models.CASCADE)
-    school = models.ForeignKey("School", on_delete=models.CASCADE)
-    parent_first_name = models.CharField(_('parent first name'),max_length=200, null=True, blank=True)
-    parent_last_name = models.CharField(_('parent last name'),max_length=200, null=True, blank=True)
-    parent_phone = models.CharField(_('parent phone'),max_length=200, null=True, blank=True)
-    parent_email = models.EmailField(_('parent email'), null=True, blank=True)
-    parent = models.ManyToManyField("Parent")
+    school = models.ForeignKey("School", on_delete=models.CASCADE, related_name="students")
 
-    def __str__(self):
-        return self.full_name
+    note = models.CharField(_('note'),max_length=200, null=True, blank=True)
+    # family infor
+    father_name = models.CharField(_('father name'),max_length=200, null=True, blank=True)
+    father_dob = models.DateField(_('father\'s birthday'), null=True, blank=True)
+    father_job = models.CharField(_('father job'),max_length=200, null=True, blank=True)
+    father_phone = models.CharField(_('father phone'),max_length=200, null=True, blank=True)
+    father_email = models.EmailField(_('father email'), null=True, blank=True)
 
-    @property
-    def full_name(self):
-        return u'{} {}'.format(self.first_name, self.last_name)
+    mother_name = models.CharField(_('mother name'),max_length=200, null=True, blank=True)
+    mother_dob = models.DateField(_('mother\'s birthday'), null=True, blank=True)
+    mother_job = models.CharField(_('mother job'),max_length=200, null=True, blank=True)
+    mother_phone = models.CharField(_('mother phone'),max_length=200, null=True, blank=True)
+    mother_email = models.EmailField(_('mother email'), null=True, blank=True)
 
-class Parent(models.Model):
-    first_name = models.CharField(_('first name'),max_length=25, null=True, blank=True)
-    last_name = models.CharField(_('last name'),max_length=10, null=True, blank=True)
-    date_of_bidth = models.DateField(_('date of bidth'))
-    phone = models.CharField(_('parent phone'),max_length=200, null=True, blank=True)
-    email = models.EmailField(_('parent email'))
     address = models.CharField(_('address'),max_length=200, null=True, blank=True)
-    
+
+    has_other_siblings_study = models.BooleanField(default=False)
+    siblings_name = models.CharField(_('siblings name'),max_length=200, null=True, blank=True)
+    siblings_class = models.CharField(_('siblings class'),max_length=200, null=True, blank=True)
+
     def __str__(self):
         return self.full_name
 
@@ -109,6 +134,7 @@ class School(models.Model):
     email = models.EmailField(_('email'))
     address = models.CharField(_('address'),max_length=200, null=True, blank=True)
     note = models.CharField(_('note'),max_length=200, null=True, blank=True)
+    last_student_id = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.name
+        return self.name if self.name else "Object School"

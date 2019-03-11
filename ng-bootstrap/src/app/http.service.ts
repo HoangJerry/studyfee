@@ -30,10 +30,28 @@ export class HttpService {
     }
   }
 
-  StudentList = (page?) => {
-    let headers = this.headers
+  StudentList = (page?,search?) => {
+    let headers = this.headers;
+    let searchquery='';
+    if (search!=undefined){
+      if (search.student_cd!=null){
+        searchquery += `&student_cd__contains=${search.student_cd}`;
+      }
+      if (search.first_name!=null){
+        searchquery += `&first_name__contains=${search.first_name}`;
+      }
+      if (search.last_name!=null){
+        searchquery += `&last_name__contains=${search.last_name}`;
+      }
+      if (search.study_at_class!=null){
+        searchquery += `&study_at_class=${search.study_at_class}`;
+      }
+      if (search.school!=null){
+        searchquery += `&school=${search.school}`;
+      }
+    }
     headers = headers.set('Authorization','Token '+localStorage.getItem('token'))
-    return this.http.get(this.APIURL+'student/?offset='+page,{headers:headers})
+    return this.http.get(this.APIURL+'student/?offset='+page+searchquery,{headers:headers})
   }
   ClassList = () => {
     let headers = this.headers

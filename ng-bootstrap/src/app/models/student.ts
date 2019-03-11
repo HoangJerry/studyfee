@@ -5,8 +5,10 @@ export class Stutdent {
 	date_of_bidth:any;
 	study_at_class:number;
 	type_of_class:number;
-	parent_first_name:string;
-	parent_last_name:string;
-	parent_phone:string;
-	parent_email:string;
+	gender:number=20;
+	eng_listening:string;
+	eng_reading:string;
+	eng_speaking:string;
+	eng_writing:string;
+	has_other_siblings_study:string="0";
 }

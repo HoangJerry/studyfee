@@ -14,6 +14,7 @@ declare var $: any;
 export class StudentsComponent implements OnInit {
   students :any;
   selected:any;
+  search:any = {};
   preBtn:any;
   nextBtn:any;
   currentPage:any = 1;
@@ -21,12 +22,17 @@ export class StudentsComponent implements OnInit {
   numberPerPage:number = 10;
   new_student:Stutdent = new Stutdent;
   multiSelect:any = false;
+  onSearching:any = false;
   multiSelectedList = [];
   selectClass:any;
   selectSchool:any;
+  selectGender:any = [{"value":"0","name":"Nam"},
+                  {"value":"10","name":"Nữ"},
+                  {"value":"20","name":"Không xác định"},]
 
   constructor(private http:HttpService,
             private toastyService:ToastyService) {
+    console.log(this.new_student);
   	this.getStudents((this.currentPage-1)*this.numberPerPage);
     this.http.ClassList().subscribe((data)=>{
       this.selectClass=data;
@@ -70,10 +76,9 @@ export class StudentsComponent implements OnInit {
     }
   }
 
-  getStudents = (page?) => {
-    this.http.StudentList(page).subscribe((data:any)=>{
+  getStudents = (page?,search?) => {
+    this.http.StudentList(page,search).subscribe((data:any)=>{
       this.students=data.results;
-
       this.preBtn = data.previous;
       this.nextBtn = data.next;
       let pages;
@@ -155,4 +160,17 @@ export class StudentsComponent implements OnInit {
     })
   }
 
+  onClickSearch = () =>{
+    this.onSearching=true;
+    this.getStudents(0,this.search);
+  }
+  
+  turnOffSearch = () =>{
+    this.onSearching=false;
+    this.getStudents(0);
+  }
+
+  onChangeHasSibling = (obj:any,value:boolean)=>{
+    obj.has_other_siblings_study=value;
+  }
 }

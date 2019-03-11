@@ -3,8 +3,9 @@
         <h2>Students Managerment</h2>
     </div>
     <div class="controllerRight">
+        <button class="btn btn-w-m btn-warning btnNav" type="button" (click)="searchButton.open()">Search</button>
         <button class="btn btn-w-m btn-primary btnNav" type="button" (click)="addButton.open()">Add</button>
-    	<button class="btn btn-w-m btn-primary btnNav" [attr.disabled]="selected?null:''" type="button" (click)="updateButton.open()">Update</button>
+    	<button class="btn btn-w-m btn-primary btnNav" [attr.disabled]="selected?null:''" type="button" (click)="updateButton.open()">Edit</button>
     	<button class="btn btn-w-m btn-danger btnNav" (click)="deleteButton.open()" type="button">Delete</button>
     </div>
 </div>
@@ -29,20 +30,32 @@
                     <tr>
                         <th>STT</th>
                         <th>Họ và tên</th>
+                        <th>Giới tính</th>
+                        <th>Năm sinh</th>
                         <th>Học lớp</th>
                         <th>Giáo viên</th>
                         <th>Khóa học</th>
+                        <th>Họ tên cha</th>
+                        <th>Số phone</th>
+                        <th>Họ tên mẹ</th>
+                        <th>Số phone</th>
                         <th>Ghi chú</th>
                     </tr>
                     </thead>
                     <tbody>
 	                    <tr *ngFor="let student of students"  [class.active]="selected==student||inMulti(student)" (click)="onClickRow(student)" (blur)="onBlurRow()" (dblclick)="multiSelect=true;onClickRow(student)">
 	                        <td>{{student.id}}</td>
-	                        <td>{{student.full_name}}</td>
+                            <td>{{student.full_name}}</td>
+                            <td>{{student.gender==0?'Nam':student.gender==10?'Nữ':'Không xác định'}}</td>
+	                        <td>{{student.date_of_bidth}}</td>
                             <td>{{student.study_at_class_view.class_id}}</td>
 	                        <td>{{student.study_at_class_view.teacher_1_view.first_name}} {{student.study_at_class_view.teacher_1_view.last_name}} {{student.study_at_class_view.teacher_2!=null?"| "+ student.study_at_class_view.teacher_2_view.first_name + student.study_at_class_view.teacher_2_view.last_name:""}}</td>
-	                        <td>{{student.type_of_class}}</td>
-	                        <td></td>
+	                        <td>{{student.study_at_class_view.class_id}}</td>
+                            <td>{{student.father_name}}</td>
+                            <td>{{student.father_phone}}</td>
+                            <td>{{student.mother_name}}</td>
+                            <td>{{student.mother_phone}}</td>
+                            <td>{{student.note}}</td>
 	                    </tr>
                     </tbody>
                 </table>
@@ -57,7 +70,13 @@
             </div>
 
             <div *ngIf="multiSelect" style="position: absolute; top: 20px; right:30px;">
-                <button class="btn btn-default btn-circle btn-lg" type="button" (click)="turnOffMultiSelect()"><i class="fa fa-times"></i></button>  
+                <button class="btn btn-danger btn-circle btn-lg" type="button" (click)="turnOffMultiSelect()"><i class="fa fa-times"></i></button>  
+            </div>
+            <div *ngIf="onSearching" style="position: absolute; top: 20px; transition: width 2s;" [style.right.px]="multiSelect?90:50">
+                <div style="position:relative;">
+                    <p style="position:absolute;right: 60px;top: 10px;">Searching...</p>
+                    <button class="btn btn-warning btn-circle btn-lg" type="button" (click)="turnOffSearch()"><i class="fa fa-times"></i></button>  
+                </div>
             </div>
        
         </div>
@@ -69,9 +88,10 @@
         <h1>Nhập thông tin</h1>
     </modal-header>
     <modal-content>
+        <h3>A. Phần thông tin học sinh</h3>
         <div class="form-group">
             <label>Mã số HS *</label>
-            <input type="text" name="student_id" value="" class="d-inline-block " [(ngModel)]="new_student.student_id" placeholder="Mã số HS">
+            <input type="text" disabled="disabled" name="student_id" value="" class="d-inline-block " [(ngModel)]="new_student.student_cd" placeholder="Mã số HS">
         </div>
         <div class="form-group">
             <label>Họ tên *</label>
@@ -79,33 +99,134 @@
             <input type="text" name="name" value="" class="d-inline-block " [(ngModel)]="new_student.last_name" placeholder="Tên">   
         </div>
         <div class="form-group">
+            <label>Giới tính</label>
+            <select name="select" [(ngModel)] = "new_student.gender">
+                <option  *ngFor="let select of selectGender"  value="{{select.value}}" >{{select.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label>Năm sinh</label>
             <input type="date" name="name" value="" class="d-inline-block " [(ngModel)]="new_student.date_of_bidth" placeholder="Năm sinh">  
         </div>
         <div class="form-group">
-            <label>Học lớp *</label>
+            <label>Hiện đang học lớp</label>
+            <input type="text" name="current_class" value="" class="d-inline-block " [(ngModel)]="new_student.current_class" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Trường đang học</label>
+            <input type="text" name="current_shool" value="" class="d-inline-block " [(ngModel)]="new_student.current_shool" placeholder="">
+        </div>
+        <label>Trình độ tiếng anh</label>
+        <div class="form-group">
+            <div class="sub form-group">
+                <label>Nghe</label>
+                <input type="text" name="eng_listening" value="" class="d-inline-block " [(ngModel)]="new_student.eng_listening" placeholder="">/10
+            </div>
+            <div class="sub form-group">
+                <label>Nói</label>
+                <input type="text" name="eng_reading" value="" class="d-inline-block " [(ngModel)]="new_student.eng_reading" placeholder="">/10
+            </div>
+            <div class="sub form-group">
+                <label>Đọc</label>
+                <input type="text" name="eng_speaking" value="" class="d-inline-block " [(ngModel)]="new_student.eng_speaking" placeholder="">/10
+            </div>
+             <div class="sub form-group">
+                <label>Viết</label>
+                <input type="text" name="eng_writing" value="" class="d-inline-block " [(ngModel)]="new_student.eng_writing" placeholder="">/10
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Năng khiếu</label>
+            <input type="text" name="gifted_skills" value="" class="d-inline-block " [(ngModel)]="new_student.gifted_skills" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Đã học robotics ở đâu</label>
+            <input type="text" name="robotics_skills" value="" class="d-inline-block " [(ngModel)]="new_student.robotics_skills" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số tháng đã học</label>
+            <input type="text" name="robotics_month" value="" class="d-inline-block " [(ngModel)]="new_student.robotics_month" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="student_phone" value="" class="d-inline-block " [(ngModel)]="new_student.student_phone" placeholder="0913 748 987">
+        </div>
+        <div class="form-group">
+            <label>Email cá nhân</label>
+            <input type="email" name="student_email" value="" class="d-inline-block " [(ngModel)]="new_student.student_email" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Đăng ký học lớp *</label>
             <select name="select" [(ngModel)] = "new_student.study_at_class">
                 <option  *ngFor="let select of selectClass"  value="{{select.id}}" >{{select.class_id}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Trường *</label>
+            <label>Học tại trường *</label>
             <select name="select" [(ngModel)] = "new_student.school">
                 <option  *ngFor="let select of selectSchool"  value="{{select.id}}" >{{select.name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Họ tên cha mẹ</label>
-            <input type="text" name="parent_first_name" value="" class="d-inline-block " [(ngModel)]="new_student.parent_first_name" placeholder="Họ lót">
-            <input type="text" name="parent_last_name" value="" class="d-inline-block " [(ngModel)]="new_student.parent_last_name" placeholder="Tên">   
+            <label>Note</label>
+            <input type="text" name="note" value="" class="d-inline-block " [(ngModel)]="new_student.note" placeholder="">
+        </div>
+        <h3>B. Thông tin gia đình</h3>
+        <div class="form-group">
+            <label>Họ tên cha</label>
+            <input type="text" name="father_name" value="" class="d-inline-block " [(ngModel)]="new_student.father_name" placeholder="Họ tên cha">
+        </div>
+
+        <div class="form-group">
+            <label>Năm sinh</label>
+            <input type="date" name="father_dob" value="" class="d-inline-block " [(ngModel)]="new_student.father_dob" placeholder="Năm sinh">  
         </div>
         <div class="form-group">
-            <label>Điện thoại liên lạc</label>
-            <input type="text" name="parent_phone" value="" class="d-inline-block " [(ngModel)]="new_student.parent_phone" placeholder="0913 748 987">
+            <label>Nghề nghiệp</label>
+            <input type="text" name="father_job" value="" class="d-inline-block " [(ngModel)]="new_student.father_job" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="father_phone" value="" class="d-inline-block " [(ngModel)]="new_student.father_phone" placeholder="0913 748 987">
         </div>
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="parent_email" value="" class="d-inline-block " [(ngModel)]="new_student.parent_email" placeholder="Email">
+            <input type="email" name="father_email" value="" class="d-inline-block " [(ngModel)]="new_student.father_email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label>Họ tên mẹ</label>
+            <input type="text" name="mother_name" value="" class="d-inline-block " [(ngModel)]="new_student.mother_name" placeholder="Họ tên mẹ">
+        </div>
+
+        <div class="form-group">
+            <label>Năm sinh</label>
+            <input type="date" name="mother_dob" value="" class="d-inline-block " [(ngModel)]="new_student.mother_dob" placeholder="Năm sinh">  
+        </div>
+        <div class="form-group">
+            <label>Nghề nghiệp</label>
+            <input type="text" name="mother_job" value="" class="d-inline-block " [(ngModel)]="new_student.mother_job" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="mother_phone" value="" class="d-inline-block " [(ngModel)]="new_student.mother_phone" placeholder="0913 748 987">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="mother_email" value="" class="d-inline-block " [(ngModel)]="new_student.mother_email" placeholder="Email">
+        </div>
+        <h3>C. Phần thông tin khác</h3>
+        <div class="form-group">
+            <label style="width:400px;">Có anh chị em học chung trường/ trung tâm hay không?</label>
+            Yes<input style="width:30px; "type="radio" name="has_other_siblings_study" class="d-inline-block "  checked="{{new_student.has_other_siblings_study==true?'checked':''}}" (click)="onChangeHasSibling(new_student,true)">
+            No<input style="width:30px;" type="radio" name="has_other_siblings_study" class="d-inline-block " checked="{{new_student.has_other_siblings_study==false?'checked':''}}" (click)="onChangeHasSibling(new_student,false)">
+        </div>
+        <div class="form-group" *ngIf="new_student.has_other_siblings_study==true">
+            <label>Họ và tên</label>
+            <input type="text" name="father_job" value="" class="d-inline-block " [(ngModel)]="new_student.father_job" placeholder="">
+        </div>
+        <div class="form-group" *ngIf="new_student.has_other_siblings_study==true">
+            <label>Lớp</label>
+            <input type="text" name="father_phone" value="" class="d-inline-block " [(ngModel)]="new_student.father_phone" placeholder="0913 748 987">
         </div>
     </modal-content>
     <modal-footer>
@@ -119,9 +240,10 @@
         <h1>Cập nhật thông tin</h1>
     </modal-header>
     <modal-content *ngIf="selected">
+        <h3>A. Phần thông tin học sinh</h3>
         <div class="form-group">
             <label>Mã số HS *</label>
-            <input type="text" name="student_id" value="" class="d-inline-block " [(ngModel)]="selected.student_id" placeholder="Mã số HS">
+            <input type="text" disabled="disabled" name="student_id" value="" class="d-inline-block " [(ngModel)]="selected.student_cd" placeholder="Mã số HS">
         </div>
         <div class="form-group">
             <label>Họ tên *</label>
@@ -129,33 +251,134 @@
             <input type="text" name="name" value="" class="d-inline-block " [(ngModel)]="selected.last_name" placeholder="Tên">   
         </div>
         <div class="form-group">
+            <label>Giới tính</label>
+            <select name="select" [(ngModel)] = "selected.gender">
+                <option  *ngFor="let select of selectGender"  value="{{select.value}}" >{{select.name}}</option>
+            </select>
+        </div>
+        <div class="form-group">
             <label>Năm sinh</label>
             <input type="date" name="name" value="" class="d-inline-block " [(ngModel)]="selected.date_of_bidth" placeholder="Năm sinh">  
         </div>
         <div class="form-group">
-            <label>Học lớp *</label>
+            <label>Hiện đang học lớp</label>
+            <input type="text" name="current_class" value="" class="d-inline-block " [(ngModel)]="selected.current_class" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Trường đang học</label>
+            <input type="text" name="current_shool" value="" class="d-inline-block " [(ngModel)]="selected.current_shool" placeholder="">
+        </div>
+        <label>Trình độ tiếng anh</label>
+        <div class="form-group">
+            <div class="sub form-group">
+                <label>Nghe</label>
+                <input type="text" name="eng_listening" value="" class="d-inline-block " [(ngModel)]="selected.eng_listening" placeholder="">/10
+            </div>
+            <div class="sub form-group">
+                <label>Nói</label>
+                <input type="text" name="eng_reading" value="" class="d-inline-block " [(ngModel)]="selected.eng_reading" placeholder="">/10
+            </div>
+            <div class="sub form-group">
+                <label>Đọc</label>
+                <input type="text" name="eng_speaking" value="" class="d-inline-block " [(ngModel)]="selected.eng_speaking" placeholder="">/10
+            </div>
+             <div class="sub form-group">
+                <label>Viết</label>
+                <input type="text" name="eng_writing" value="" class="d-inline-block " [(ngModel)]="selected.eng_writing" placeholder="">/10
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Năng khiếu</label>
+            <input type="text" name="gifted_skills" value="" class="d-inline-block " [(ngModel)]="selected.gifted_skills" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Đã học robotics ở đâu</label>
+            <input type="text" name="robotics_skills" value="" class="d-inline-block " [(ngModel)]="selected.robotics_skills" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số tháng đã học</label>
+            <input type="text" name="robotics_month" value="" class="d-inline-block " [(ngModel)]="selected.robotics_month" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="student_phone" value="" class="d-inline-block " [(ngModel)]="selected.student_phone" placeholder="0913 748 987">
+        </div>
+        <div class="form-group">
+            <label>Email cá nhân</label>
+            <input type="email" name="student_email" value="" class="d-inline-block " [(ngModel)]="selected.student_email" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Đăng ký học lớp *</label>
             <select name="select" [(ngModel)] = "selected.study_at_class">
                 <option  *ngFor="let select of selectClass"  value="{{select.id}}" >{{select.class_id}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Trường *</label>
+            <label>Học tại trường *</label>
             <select name="select" [(ngModel)] = "selected.school">
                 <option  *ngFor="let select of selectSchool"  value="{{select.id}}" >{{select.name}}</option>
             </select>
         </div>
         <div class="form-group">
-            <label>Họ tên cha mẹ</label>
-            <input type="text" name="parent_first_name" value="" class="d-inline-block " [(ngModel)]="selected.parent_first_name" placeholder="Họ lót">
-            <input type="text" name="parent_last_name" value="" class="d-inline-block " [(ngModel)]="selected.parent_last_name" placeholder="Tên">   
+            <label>Note</label>
+            <input type="text" name="note" value="" class="d-inline-block " [(ngModel)]="selected.note" placeholder="">
+        </div>
+        <h3>B. Thông tin gia đình</h3>
+        <div class="form-group">
+            <label>Họ tên cha</label>
+            <input type="text" name="father_name" value="" class="d-inline-block " [(ngModel)]="selected.father_name" placeholder="Họ tên cha">
+        </div>
+
+        <div class="form-group">
+            <label>Năm sinh</label>
+            <input type="date" name="father_dob" value="" class="d-inline-block " [(ngModel)]="selected.father_dob" placeholder="Năm sinh">  
         </div>
         <div class="form-group">
-            <label>Điện thoại liên lạc</label>
-            <input type="text" name="parent_phone" value="" class="d-inline-block " [(ngModel)]="selected.parent_phone" placeholder="0913 748 987">
+            <label>Nghề nghiệp</label>
+            <input type="text" name="father_job" value="" class="d-inline-block " [(ngModel)]="selected.father_job" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="father_phone" value="" class="d-inline-block " [(ngModel)]="selected.father_phone" placeholder="0913 748 987">
         </div>
         <div class="form-group">
             <label>Email</label>
-            <input type="email" name="parent_email" value="" class="d-inline-block " [(ngModel)]="selected.parent_email" placeholder="Email">
+            <input type="email" name="father_email" value="" class="d-inline-block " [(ngModel)]="selected.father_email" placeholder="Email">
+        </div>
+        <div class="form-group">
+            <label>Họ tên mẹ</label>
+            <input type="text" name="mother_name" value="" class="d-inline-block " [(ngModel)]="selected.mother_name" placeholder="Họ tên mẹ">
+        </div>
+
+        <div class="form-group">
+            <label>Năm sinh</label>
+            <input type="date" name="mother_dob" value="" class="d-inline-block " [(ngModel)]="selected.mother_dob" placeholder="Năm sinh">  
+        </div>
+        <div class="form-group">
+            <label>Nghề nghiệp</label>
+            <input type="text" name="mother_job" value="" class="d-inline-block " [(ngModel)]="selected.mother_job" placeholder="">
+        </div>
+        <div class="form-group">
+            <label>Số điện thoại</label>
+            <input type="text" name="mother_phone" value="" class="d-inline-block " [(ngModel)]="selected.mother_phone" placeholder="0913 748 987">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="mother_email" value="" class="d-inline-block " [(ngModel)]="selected.mother_email" placeholder="Email">
+        </div>
+        <h3>C. Phần thông tin khác</h3>
+        <div class="form-group">
+            <label style="width:400px;">Có anh chị em học chung trường/ trung tâm hay không?</label>
+            Yes<input style="width:30px; "type="radio" name="has_other_siblings_study" class="d-inline-block "  checked="{{selected.has_other_siblings_study==true?'checked':''}}" (click)="onChangeHasSibling(selected,true)">
+            No<input style="width:30px;" type="radio" name="has_other_siblings_study" class="d-inline-block " checked="{{selected.has_other_siblings_study==false?'checked':''}}" (click)="onChangeHasSibling(selected,false)">
+        </div>
+        <div class="form-group" *ngIf="selected.has_other_siblings_study==true">
+            <label>Họ và tên</label>
+            <input type="text" name="father_job" value="" class="d-inline-block " [(ngModel)]="selected.father_job" placeholder="">
+        </div>
+        <div class="form-group" *ngIf="selected.has_other_siblings_study==true">
+            <label>Lớp</label>
+            <input type="text" name="father_phone" value="" class="d-inline-block " [(ngModel)]="selected.father_phone" placeholder="0913 748 987">
         </div>
     </modal-content>
     <modal-footer>
@@ -185,6 +408,41 @@
         <div *ngIf="selected||(multiSelect&&multiSelectedList)">
             <button class="btn btn-w-m btn-primary" (click)="onClickDelete();deleteButton.close();">Yes</button>
             <button class="btn btn-w-m btn-default" (click)="deleteButton.close()">No</button>
+        </div>
+    </modal-footer>
+</modal>
+
+<modal #searchButton modalClass="modal-lg" class="addModal">
+    <modal-header>
+        <h1>Tìm kiếm học sinh</h1>
+    </modal-header>
+    <modal-content *ngIf="search!=undefined">
+        <div class="form-group">
+            <label>Mã số HS</label>
+            <input type="text" name="student_cd" value="" class="d-inline-block " [(ngModel)]="search.student_cd" placeholder="Mã số HS">
+        </div>
+        <div class="form-group">
+            <label>Họ tên</label>
+            <input type="text" name="first_name" value="" class="d-inline-block " [(ngModel)]="search.first_name" placeholder="Họ lót">
+            <input type="text" name="name" value="" class="d-inline-block " [(ngModel)]="search.last_name" placeholder="Tên">   
+        </div>
+        <div class="form-group">
+            <label>Học lớp</label>
+            <select name="select" [(ngModel)] = "search.study_at_class">
+                <option  *ngFor="let select of selectClass"  value="{{select.id}}" >{{select.class_id}}</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Trường</label>
+            <select name="select" [(ngModel)] = "search.school">
+                <option  *ngFor="let select of selectSchool"  value="{{select.id}}" >{{select.name}}</option>
+            </select>
+        </div>
+    </modal-content>
+    <modal-footer>
+        <div >
+            <button class="btn btn-w-m btn-primary" (click)="onClickSearch();searchButton.close();">Search</button>
+            <button class="btn btn-w-m btn-default" (click)="searchButton.close()">Close</button>
         </div>
     </modal-footer>
 </modal>

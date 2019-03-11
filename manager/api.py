@@ -38,10 +38,25 @@ class MultiDelete():
         self.queryset.filter(id__in=list_delete).delete()
         return Response(status=status.HTTP_200_OK,data={'detail':'delete success'})
 
+import django_filters
+
+class StudentFilter(django_filters.FilterSet):
+
+    class Meta:
+        model = Student    
+        fields = {
+            'student_cd': ['exact', 'contains'],
+            'first_name': ['exact', 'contains'],
+            'last_name': ['exact', 'contains'],
+            'study_at_class': ['exact',],
+            'school': ['exact',]
+        }
+
 class StudentList(generics.ListCreateAPIView, MultiDelete):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filterset_class = StudentFilter
 
     def post(self, request, format=None):
         if request.data.get('list_delete'):
@@ -50,13 +65,13 @@ class StudentList(generics.ListCreateAPIView, MultiDelete):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             student = serializer.create(serializer.validated_data)
-
-            parent, created = Parent.objects.get_or_create(first_name=request.data['parent_first_name'],
-                                                            last_name=request.data['parent_last_name'],
-                                                            phone=request.data['parent_phone'],
-                                                            email=request.data['parent_email'])
-            student.parent.add(parent)
-            
+            print(student.school)
+            print(student.student_cd)
+            student.school.last_student_id+=1
+            student.school.save()
+            temp = f'{student.school.last_student_id:05}'
+            student.student_cd = '{}-{}'.format(student.school.school_id,temp)
+            student.save()
             return Response(StudentSerializer(student).data,status=status.HTTP_200_OK) 
 
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):

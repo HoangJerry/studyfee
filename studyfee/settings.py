@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'manager',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
+
 
     'corsheaders',
 ]
@@ -88,11 +90,13 @@ DATABASES = {
    'default': {
        'ENGINE': 'djongo',
        'NAME': 'studyfee',
+       'ENFORCE_SCHEMA': False,
    }
 }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -128,7 +132,15 @@ REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
-    )
+    ),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
+    'VERBOSE_LOOKUPS': {
+    'exact': (''),
+    'iexact': (''),
+    'contains': ('contains'),
+    'icontains': ('contains'),
+    }
+
 }
 
 # Internationalization
