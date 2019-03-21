@@ -7,16 +7,22 @@
 		color: black;
 	}
 }
-.addModal .sub label{
-	margin-left: 50px;
-	width: 100px;
-	display: inline-block;
-	font-weight: 800;
-
-	.text-black{
-		color: black;
-	}
+.addModal .group-infor{
+	margin-left: 30px
 }
+.addModal .sub{
+	margin-left: 30px;	
+}
+.addModal .sub label{
+	width: 105px;	
+}
+
+
+.addModal .sub input, select{
+	width: 200px;	
+	margin-right: 15px;
+}
+
 
 .addModal input, select, select:focus {
 	width: 250px;
@@ -37,6 +43,9 @@
 		.text-black{
 			color: black;
 		}
+	}
+	.addModal .sub{
+		margin-left: 30px;	
 	}
 
 	.addModal .sub label{
@@ -60,6 +69,11 @@
 	    outline: none ;
 	    margin-right: 30px;
 	}
+
+	.addModal .sub input, select{
+		width: 100px;	
+		margin-right: 15px;
+	}
 }
 @media (max-width: 521px) {
 	.addModal label{
@@ -80,6 +94,10 @@
 		display: inline-block;
 	    outline: none ;
 	    margin-right: 30px;
+	}
+	.addModal .sub input, select{
+		width: 120px;	
+		margin-right: 15px;
 	}
 }
 

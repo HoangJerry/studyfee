@@ -65,8 +65,6 @@ class StudentList(generics.ListCreateAPIView, MultiDelete):
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             student = serializer.create(serializer.validated_data)
-            print(student.school)
-            print(student.student_cd)
             student.school.last_student_id+=1
             student.school.save()
             temp = f'{student.school.last_student_id:05}'
@@ -77,6 +75,29 @@ class StudentList(generics.ListCreateAPIView, MultiDelete):
 class StudentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        previous_school = instance.school
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        student =  self.get_object()
+        if not previous_school == student.school:
+            student.school.last_student_id+=1
+            student.school.save()
+            temp = f'{student.school.last_student_id:05}'
+            student.student_cd = '{}-{}'.format(student.school.school_id,temp)
+            student.save()
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            # If 'prefetch_related' has been applied to a queryset, we need to
+            # forcibly invalidate the prefetch cache on the instance.
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+
 
 
 class ClassList(generics.ListAPIView):
