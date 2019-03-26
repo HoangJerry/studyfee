@@ -14,7 +14,7 @@ declare var $: any;
 export class StudentsComponent implements OnInit {
   students :any;
   selected:any;
-  search:any = {};
+  search:any = {'study_at_class':"",'school':""};
   preBtn:any;
   nextBtn:any;
   currentPage:any = 1;
@@ -39,6 +39,7 @@ export class StudentsComponent implements OnInit {
     })
     this.http.SchoolList().subscribe((data)=>{
       this.selectSchool=data;
+      console.log(this.selectSchool);
     })
   }
 
